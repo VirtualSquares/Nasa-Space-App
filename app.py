@@ -118,21 +118,19 @@ def main():
                     earthquake_times.append(point[1])
 
         if final_list:
-            # Create a DataFrame from the earthquake data
             earthquake_data = pd.DataFrame({
                 'Earthquake Velocity (c/s)': final_list,
                 'rel_time(sec)': earthquake_times
             })
 
-            # Define the filename and path
-            csv_filename = f"earthquake_data_{uuid.uuid4()}.csv"
-            csv_filepath = os.path.join('static', csv_filename)
+            # Correct path for outputCSV
+            output_csv_path = os.path.join('static', 'outputCatalog.csv')
+            if os.path.exists(output_csv_path):
+                earthquake_data.to_csv(output_csv_path, mode='a', header=False, index=False)
+            else:
+                earthquake_data.to_csv(output_csv_path, index=False)
 
-            # Save the DataFrame to a CSV file
-            earthquake_data.to_csv(csv_filepath, index=False)
-
-            # Prepare the CSV URL for rendering in the template
-            csv_url = f"/static/{csv_filename}"
+            csv_url = f"/static/outputCatalog.csv"
 
         plot_data(time_rel, velocity, earthquake_times, final_list)
         plot_url = plot_filename
@@ -150,7 +148,7 @@ def plot_data(time, velocity, earthquake_times, earthquake):
 
     if len(earthquake_times) > 0:
         for eq_time in earthquake_times:
-            plt.axvspan(eq_time - 200, eq_time + 200, color='red', alpha=0.9)
+            plt.axvspan(eq_time - 2, eq_time + 2, color='red', alpha=0.9)
             plt.text(eq_time, max(velocity), f'EQ: {eq_time:.2f} sec', color='black',
                      ha='center', va='bottom', fontsize=9, bbox=dict(facecolor='white', alpha=0.5))
 
