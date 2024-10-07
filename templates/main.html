@@ -15,12 +15,14 @@
     <div class="box" style="padding: 40px; border: 2px solid white; border-radius: 15px;">
         <div class="innerbox" style="display: flex; flex-direction: column; gap: 15px; align-items: center;">
             <h1 style="text-align: center; font-size: 30px;">Upload CSV File</h1>
+            <p style="text-align: center; font-size: 15px;">(Output Catalog Automatically Updates)</p>
             <form action="/main" method="POST" enctype="multipart/form-data" style="display: flex; justify-content: center; align-items: center; flex-direction: column;">
                 <input type="file" name="file" accept=".csv" style="text-align: center;" required>
                 <div class="holder" style="display: flex; gap: 10px; margin-top: 5%">
-                    <button type="submit" style="margin-top: 10px; font-size: 20px; font-family: 'Comfortaa'; border-radius: 5px; cursor: pointer; padding: 10px;">Mars</button>
-                    <button type="submit" style="margin-top: 10px; font-size: 20px; font-family: 'Comfortaa'; border-radius: 5px; cursor: pointer; padding: 10px;">Lunar</button>
+                    <button type="submit" name="plot_type" value="mars" style="margin-top: 10px; font-size: 20px; font-family: 'Comfortaa'; border-radius: 5px; cursor: pointer; padding: 10px;">Mars</button>
+                    <button type="submit" name="plot_type" value="lunar" style="margin-top: 10px; font-size: 20px; font-family: 'Comfortaa'; border-radius: 5px; cursor: pointer; padding: 10px;">Lunar</button>
                 </div>
+
 
             </form>
             {% if plot_url %}
