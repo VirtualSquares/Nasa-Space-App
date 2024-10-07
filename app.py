@@ -29,13 +29,11 @@ def main():
         if file.filename == '':
             return "No selected file", 400
 
-        # Determine which button was clicked
         plot_type = request.form.get('plot_type')
 
         # READ CSV DATA #
         df = pd.read_csv(file)
 
-        # Read based on the button clicked
         if plot_type == "mars":
             x = df['rel_time(sec)']
             y = df['velocity(c/s)']
@@ -134,6 +132,11 @@ def main():
                 'rel_time(sec)': earthquake_times
             })
 
+            if plot_type == "mars":
+                pass
+            elif plot_type == "lunar":
+                earthquake_times[-1] *= 62.3
+
             output_csv_path = os.path.join('static', 'outputCatalog.csv')
             if os.path.exists(output_csv_path):
                 earthquake_data.to_csv(output_csv_path, mode='a', header=False, index=False)
@@ -157,10 +160,11 @@ def plot_data(time, velocity, earthquake_times, earthquake):
     plt.legend()
 
     if len(earthquake_times) > 0:
-        for eq_time in earthquake_times:
-            plt.axvspan(eq_time - 2, eq_time + 2, color='red', alpha=0.9)
-            plt.text(eq_time, max(velocity), f'EQ: {eq_time:.2f} sec', color='black',
-                     ha='center', va='bottom', fontsize=9, bbox=dict(facecolor='white', alpha=0.5))
+        rightmost_eq_time = earthquake_times[-1]
+        plt.axvspan(rightmost_eq_time - 2, rightmost_eq_time + 2, color='red', alpha=0.9)
+        plt.text(rightmost_eq_time, max(velocity), f'EQ: {rightmost_eq_time:.2f} sec', color='black',
+                 ha='center', va='bottom', fontsize=9, bbox=dict(facecolor='white', alpha=0.5))
+
 
     plt.show()
     plt.close()
