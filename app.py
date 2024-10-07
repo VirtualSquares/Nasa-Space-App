@@ -29,18 +29,29 @@ def main():
         if file.filename == '':
             return "No selected file", 400
 
+        # Determine which button was clicked
+        plot_type = request.form.get('plot_type')
+
         # READ CSV DATA #
         df = pd.read_csv(file)
 
-        x = df['rel_time(sec)']
-        y = df['velocity(c/s)']
+        # Read based on the button clicked
+        if plot_type == "mars":
+            x = df['rel_time(sec)']
+            y = df['velocity(c/s)']
+        elif plot_type == "lunar":
+            x = df['time_rel(sec)']
+            y = df['velocity(m/s)']
+
+        else:
+            return "Invalid plot type", 400
 
         fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 6))
 
         ax1.plot(x, y, linewidth=2, linestyle="-", c="b", label="Original")
         ax1.set_title("Original Data (From CSV)")
         ax1.set_xlabel("Relative Time (sec)")
-        ax1.set_ylabel("Velocity (c/s)")
+        ax1.set_ylabel("Velocity (units/s)")
         ax1.legend()
 
         window_length = 10
@@ -50,7 +61,7 @@ def main():
         ax2.plot(x, yy, linewidth=2, linestyle="-", c="r", label="Filtered")
         ax2.set_title("Filtered Data")
         ax2.set_xlabel("Relative Time (sec)")
-        ax2.set_ylabel("Velocity (c/s)")
+        ax2.set_ylabel("Velocity (units/s)")
         ax2.legend()
 
         plot_filename = f"plot_{uuid.uuid4()}.png"
@@ -119,11 +130,10 @@ def main():
 
         if final_list:
             earthquake_data = pd.DataFrame({
-                'Earthquake Velocity (c/s)': final_list,
+                'Earthquake Velocity (units/s)': final_list,
                 'rel_time(sec)': earthquake_times
             })
 
-            # Correct path for outputCSV
             output_csv_path = os.path.join('static', 'outputCatalog.csv')
             if os.path.exists(output_csv_path):
                 earthquake_data.to_csv(output_csv_path, mode='a', header=False, index=False)
@@ -139,10 +149,10 @@ def main():
 
 def plot_data(time, velocity, earthquake_times, earthquake):
     plt.figure(figsize=(10, 5))
-    plt.plot(time, velocity, label='Velocity (c/s)', color='blue')
+    plt.plot(time, velocity, label='Velocity (units/s)', color='blue')
     plt.title('Velocity vs. Time (Earthquake Highlighted In Red)')
     plt.xlabel('Time (seconds)')
-    plt.ylabel('Velocity (c/s)')
+    plt.ylabel('Velocity (units/s)')
     plt.grid()
     plt.legend()
 
