@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="static/index.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div>
+        <div class="nav">
+            <div style="font-size: 24px; font-weight: bold;">Seismic Detection</div>
+            <div>
+                <p style="display: inline; margin-right: 15px; cursor: pointer;">Home</p>
+                <p style="display: inline; margin-right: 15px; cursor: pointer;">Test</p>
+                <p style="display: inline; margin-right: 15px; cursor: pointer;">About</p>
+                <p style="display: inline; margin-right: 15px; cursor: pointer;">Contact</p>
+            </div>
+        </div>
+        <div class="hero">
+            <div class="slogan">
+                <h1 style="font-size: 50px;">Innovative Algorithimic Solution</h1>
+                <h1 style="color: #76ABAE; font-size: 70px;">For Seismic Detection</h1>
+                <button onclick="handleClick()"
+                    style="display: block; margin: 20px auto; padding: 10px 20px; font-size: 25px; color: #fff; background-color: #76ABAE; border: none; border-radius: 5px; cursor: pointer;">Get
+                    Started</button>
+            </div>
+
+        </div>
+    </div>
+
+
+    </div>
+
+    <canvas id="particles"></canvas>
+    <script src="static/particles.js"></script>
+
+    <script>
+        function handleClick() {
+            window.location.href = "/main";
+        }
+    </script>
+</body>
+
+</html>
