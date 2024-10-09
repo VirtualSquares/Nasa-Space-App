@@ -8,8 +8,11 @@ import uuid
 
 app = Flask(__name__)
 
+# Ensure directories exist
 if not os.path.exists('static'):
     os.makedirs('static')
+if not os.path.exists('catalogs'):
+    os.makedirs('catalogs')
 
 @app.route('/')
 def index():
@@ -40,7 +43,6 @@ def main():
         elif plot_type == "lunar":
             x = df['time_rel(sec)']
             y = df['velocity(m/s)']
-
         else:
             return "Invalid plot type", 400
 
@@ -122,7 +124,7 @@ def main():
             nearby_points.sort(key=lambda x: abs(x[1] - last_peak_time))
 
             for point in nearby_points:
-                if len(final_list) < 4:
+                if len(final_list) < 1:
                     final_list.append(point[0])
                     earthquake_times.append(point[1])
 
@@ -133,9 +135,13 @@ def main():
             })
 
             if plot_type == "mars":
-                pass
+                catalog_path = os.path.join('catalogs', 'marsCatalog.csv')
             elif plot_type == "lunar":
-                earthquake_times[-1] *= 62.3
+                catalog_path = os.path.join('catalogs', 'lunarCatalog.csv')
+
+            for time in earthquake_times:
+                with open(catalog_path, 'a') as f:
+                    f.write(f"{file.filename}, {time}\n")
 
             output_csv_path = os.path.join('static', 'outputCatalog.csv')
             if os.path.exists(output_csv_path):
@@ -164,7 +170,6 @@ def plot_data(time, velocity, earthquake_times, earthquake):
         plt.axvspan(rightmost_eq_time - 2, rightmost_eq_time + 2, color='red', alpha=0.9)
         plt.text(rightmost_eq_time, max(velocity), f'EQ: {rightmost_eq_time:.2f} sec', color='black',
                  ha='center', va='bottom', fontsize=9, bbox=dict(facecolor='white', alpha=0.5))
-
 
     plt.show()
     plt.close()
